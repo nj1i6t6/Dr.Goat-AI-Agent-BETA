@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="620" viewBox="0 0 1180 620">
+  <style>
+    text { font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; fill: #1b1b1b; }
+    .title { font-size: 28px; font-weight: bold; }
+    .section { fill: #eef5ff; stroke: #90a4ae; stroke-dasharray: 10 6; stroke-width: 2; rx: 18; ry: 18; }
+    .module { fill: #ffffff; stroke-width: 2.3; rx: 16; ry: 16; }
+    .backend { stroke: #1e88e5; }
+    .frontend { stroke: #00897b; }
+    .label { font-size: 20px; font-weight: 600; }
+    .note { font-size: 16px; fill: #546e7a; }
+    .arrow { stroke: #455a64; stroke-width: 2.2; fill: none; marker-end: url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#455a64" />
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#f3f6fb" />
+  <text x="590" y="50" text-anchor="middle" class="title">子系統互動圖 - 認證與權限</text>
+
+  <rect class="section" x="80" y="110" width="400" height="440" />
+  <text x="280" y="140" text-anchor="middle" class="note">前端模組</text>
+
+  <rect class="section" x="600" y="110" width="500" height="440" />
+  <text x="850" y="140" text-anchor="middle" class="note">後端模組</text>
+
+  <rect class="module frontend" x="120" y="200" width="320" height="120" />
+  <text text-anchor="middle">
+    <tspan x="280" y="245" class="label">LoginView</tspan>
+    <tspan x="280" y="273" class="note">前端登入/註冊介面</tspan>
+    <tspan x="280" y="301" class="note">views/LoginView.vue</tspan>
+  </text>
+
+  <rect class="module frontend" x="120" y="360" width="320" height="120" />
+  <text text-anchor="middle">
+    <tspan x="280" y="405" class="label">Auth Store</tspan>
+    <tspan x="280" y="433" class="note">stores/auth.js</tspan>
+    <tspan x="280" y="461" class="note">管理 token、登入狀態</tspan>
+  </text>
+
+  <rect class="module backend" x="650" y="260" width="400" height="140" />
+  <text text-anchor="middle">
+    <tspan x="850" y="305" class="label">Auth API</tspan>
+    <tspan x="850" y="333" class="note">app/api/auth.py</tspan>
+    <tspan x="850" y="361" class="note">登入、登出、註冊、Session 驗證</tspan>
+</text>
+
+  <path class="arrow" d="M440 255 L 650 305" />
+  <text x="540" y="250" class="note">送出認證請求</text>
+
+  <path class="arrow" d="M440 415 L 650 325" />
+  <text x="540" y="360" class="note">攜帶 token 驗證 Session</text>
+
+  <path class="arrow" d="M650 360 L 440 460" />
+  <text x="540" y="420" class="note">回傳權限資訊</text>
+
+  <path class="arrow" d="M650 295 L 440 220" />
+  <text x="540" y="210" class="note">多因子驗證挑戰</text>
+  </svg>

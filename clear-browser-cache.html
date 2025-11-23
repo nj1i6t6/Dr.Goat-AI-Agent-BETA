@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清除瀏覽器緩存 - 領頭羊博士</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #c0392b;
+        }
+        .success {
+            color: #27ae60;
+            margin-top: 10px;
+        }
+        .info {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>清除瀏覽器緩存工具</h1>
+        
+        <div class="info">
+            <strong>說明：</strong>如果您遇到 JavaScript 錯誤或數據載入問題，可以使用下面的按鈕清除瀏覽器中可能損壞的數據。
+        </div>
+        
+        <button class="button" onclick="clearLocalStorage()">清除 LocalStorage</button>
+        <button class="button" onclick="clearSessionStorage()">清除 SessionStorage</button>
+        <button class="button" onclick="clearAllStorage()">清除所有緩存</button>
+        <button class="button" onclick="reloadPage()">重新載入頁面</button>
+        
+        <div id="result"></div>
+        
+        <div class="info">
+            <strong>注意：</strong>
+            <ul>
+                <li>清除 LocalStorage 會登出您的帳號</li>
+                <li>清除後需要重新登入系統</li>
+                <li>這會解決大部分由損壞數據引起的錯誤</li>
+            </ul>
+        </div>
+        
+        <p>
+            <a href="http://localhost">← 返回領頭羊博士系統</a>
+        </p>
+    </div>
+
+    <script>
+        function showResult(message, isSuccess = true) {
+            const result = document.getElementById('result');
+            result.innerHTML = `<div class="${isSuccess ? 'success' : 'error'}">${message}</div>`;
+        }
+
+        function clearLocalStorage() {
+            try {
+                localStorage.clear();
+                showResult('✅ LocalStorage 已清除！');
+            } catch (error) {
+                showResult('❌ 清除 LocalStorage 失敗: ' + error.message, false);
+            }
+        }
+
+        function clearSessionStorage() {
+            try {
+                sessionStorage.clear();
+                showResult('✅ SessionStorage 已清除！');
+            } catch (error) {
+                showResult('❌ 清除 SessionStorage 失敗: ' + error.message, false);
+            }
+        }
+
+        function clearAllStorage() {
+            try {
+                localStorage.clear();
+                sessionStorage.clear();
+                showResult('✅ 所有瀏覽器緩存已清除！');
+            } catch (error) {
+                showResult('❌ 清除緩存失敗: ' + error.message, false);
+            }
+        }
+
+        function reloadPage() {
+            window.location.reload(true);
+        }
+
+        // 自動檢測並報告問題
+        window.addEventListener('load', function() {
+            try {
+                // 檢查是否有損壞的用戶數據
+                const userStr = localStorage.getItem('user');
+                if (userStr && userStr !== 'null') {
+                    JSON.parse(userStr);
+                }
+                
+                // 檢查 API Key
+                const apiKey = localStorage.getItem('geminiApiKey');
+                if (apiKey && typeof apiKey !== 'string') {
+                    throw new Error('API Key 格式錯誤');
+                }
+                
+                showResult('✅ 瀏覽器數據檢查通過！');
+            } catch (error) {
+                showResult('⚠️ 偵測到損壞的瀏覽器數據，建議清除緩存：' + error.message, false);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+# ========================
+# General / OS
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# IDE / Editor
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ========================
+# Python / Backend
+# ========================
+
+# Virtual Environment - CRITICAL
+# This prevents uploading gigabytes of dependency files.
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Sensitive Environment Variables - CRITICAL
+# Never commit your .env file containing secrets!
+backend/.env
+
+# ========================
+# Node.js / Frontend
+# ========================
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependency directories - CRITICAL
+node_modules/
+
+# Build output from `npm run build`
+# We don't need to track the build output in Git.
+frontend/dist/
+dist-ssr/
+
+# ========================
+# Other Project Files
+# ========================
+
+# Ignore any personal notes or temporary files
+# You can add your own files here, e.g., MyNotes.txt
+*.tmp
+*.bak
+專案說明.txt
+啟動說明.txt

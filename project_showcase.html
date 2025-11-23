@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>領頭羊博士 · 全方位智慧養殖平台 Showcase</title>
+    <style>
+        :root {
+            --bg: #030712;
+            --bg-soft: rgba(15, 23, 42, 0.8);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-strong: #0ea5e9;
+            --violet: #a855f7;
+            --lime: #a3e635;
+            --shadow: 0 30px 70px -40px rgba(14, 165, 233, 0.85);
+            font-family: "Noto Sans TC", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.35) 0%, transparent 45%),
+                        radial-gradient(circle at 90% 10%, rgba(168, 85, 247, 0.35) 0%, transparent 55%),
+                        var(--bg);
+            color: var(--text);
+            font-size: clamp(18px, 1.1vw + 14px, 20px);
+            line-height: 1.85;
+        }
+
+        header {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(80px, 14vw, 180px) 8% 120px;
+        }
+
+        header::before,
+        header::after {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            filter: blur(85px);
+            opacity: 0.55;
+            animation: float 16s ease-in-out infinite;
+        }
+
+        header::before {
+            top: -160px;
+            left: -120px;
+            background: rgba(56, 189, 248, 0.55);
+        }
+
+        header::after {
+            bottom: -180px;
+            right: -140px;
+            background: rgba(168, 85, 247, 0.45);
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(5%, -5%, 0) scale(1.1); }
+        }
+
+        .hero {
+            position: relative;
+            display: grid;
+            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            align-items: center;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.6rem, 5vw, 4.2rem);
+            letter-spacing: -0.03em;
+            margin: 0 0 16px;
+        }
+
+        .hero p {
+            font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-top: 28px;
+        }
+
+        .badge {
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .hero-visual {
+            position: relative;
+            border-radius: 28px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.7));
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .hero-visual img {
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            box-shadow: 0 25px 60px -35px rgba(59, 130, 246, 0.65);
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            backdrop-filter: blur(20px);
+            background: rgba(3, 7, 18, 0.65);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        nav ul {
+            margin: 0 auto;
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            padding: 18px clamp(5%, 8vw, 12%);
+            justify-content: center;
+        }
+
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            position: relative;
+            padding: 6px 0;
+        }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--violet));
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.35s ease;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            color: var(--text);
+        }
+
+        nav a:hover::after,
+        nav a:focus::after {
+            transform: scaleX(1);
+        }
+
+        section {
+            padding: clamp(70px, 12vw, 140px) clamp(5%, 8vw, 12%);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 3.2vw, 3rem);
+            margin: 0 0 28px;
+            letter-spacing: -0.02em;
+        }
+
+        .lead {
+            max-width: 920px;
+            color: var(--muted);
+            font-size: clamp(1.2rem, 2.1vw, 1.6rem);
+            margin-bottom: 40px;
+        }
+
+        .grid-cards {
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+
+        .card {
+            position: relative;
+            padding: 28px;
+            border-radius: 22px;
+            background: var(--bg-soft);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            box-shadow: 0 25px 60px -45px rgba(56, 189, 248, 0.65);
+            overflow: hidden;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 85px -65px rgba(168, 85, 247, 0.75);
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 60%);
+            mix-blend-mode: soft-light;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        .card h3 {
+            margin: 0 0 14px;
+            font-size: 1.45rem;
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+
+        .stacked {
+            display: grid;
+            gap: 24px;
+        }
+
+        .media-block {
+            border-radius: 26px;
+            padding: 32px;
+            background: linear-gradient(130deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.75));
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            display: grid;
+            gap: 24px;
+        }
+
+        .media-block img {
+            width: 100%;
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 28px 70px -45px rgba(59, 130, 246, 0.55);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 28px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(var(--accent), var(--violet));
+            opacity: 0.6;
+        }
+
+        .timeline-item {
+            margin-bottom: 28px;
+            position: relative;
+            padding-left: 18px;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -26px;
+            top: 6px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--violet));
+            box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.15);
+        }
+
+        .module-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.08);
+            margin-bottom: 12px;
+            font-size: 0.98rem;
+            letter-spacing: 0.04em;
+        }
+
+        .module-pill span:last-child {
+            color: var(--muted);
+        }
+
+        .cta {
+            padding: clamp(80px, 12vw, 140px) clamp(5%, 8vw, 12%);
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-card {
+            display: inline-grid;
+            gap: 20px;
+            padding: clamp(48px, 7vw, 72px);
+            border-radius: 32px;
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(9, 9, 11, 0.88));
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            box-shadow: 0 30px 110px -80px rgba(56, 189, 248, 0.9);
+        }
+
+        .cta-card h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin: 0;
+        }
+
+        .cta-card p {
+            margin: 0;
+            max-width: 720px;
+            color: var(--muted);
+            font-size: clamp(1.2rem, 2.1vw, 1.6rem);
+        }
+
+        .cta-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .cta-actions a {
+            padding: 14px 26px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-primary {
+            background: linear-gradient(120deg, var(--accent), var(--violet));
+            color: var(--bg);
+            box-shadow: 0 18px 45px -25px rgba(56, 189, 248, 0.65);
+        }
+
+        .cta-secondary {
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            color: var(--muted);
+            background: rgba(148, 163, 184, 0.08);
+        }
+
+        .cta-actions a:hover {
+            transform: translateY(-4px);
+        }
+
+        footer {
+            padding: 40px clamp(5%, 8vw, 12%);
+            color: rgba(148, 163, 184, 0.7);
+            font-size: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+            border-top: 1px solid rgba(148, 163, 184, 0.12);
+            background: rgba(3, 7, 18, 0.85);
+        }
+
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media (max-width: 960px) {
+            .hero-visual { padding: 28px; }
+            nav ul { gap: 12px; }
+        }
+
+        @media (max-width: 640px) {
+            header { padding-top: 100px; }
+            .hero-visual { order: -1; }
+            .badge-row { gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <header id="top">
+        <div class="hero">
+            <div>
+                <div class="badge-row">
+                    <div class="badge">AI Assisted Herd Management</div>
+                    <div class="badge">IoT Sensor Network</div>
+                    <div class="badge">Data-Driven Nutrition</div>
+                </div>
+                <h1>領頭羊博士：智慧畜牧的全方位數據平台</h1>
+                <p>整合 AI 預測、IoT 感測、營養建議、可視化儀表板與企業級追溯機制，將羊群的健康與營運效率推升至新高度。此 Showcase 彙整專案關鍵價值、核心模組、技術架構與產品藍圖，協助團隊與利害關係人快速理解產品亮點。</p>
+            </div>
+            <div class="hero-visual">
+                <img src="docs/picture/deployment_architecture.svg" alt="Deployment architecture overview">
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#value">產品價值</a></li>
+            <li><a href="#features">核心模組</a></li>
+            <li><a href="#architecture">系統架構</a></li>
+            <li><a href="#ai">AI / RAG</a></li>
+            <li><a href="#iot">IoT 與自動化</a></li>
+            <li><a href="#analytics">營運分析</a></li>
+            <li><a href="#roadmap">發展路線</a></li>
+            <li><a href="#cta">立即體驗</a></li>
+        </ul>
+    </nav>
+
+    <section id="value">
+        <h2 class="section-title">產品價值主張</h2>
+        <p class="lead">領頭羊博士以「資料驅動的畜牧決策」為核心，針對中大型羊場的營運痛點提供完整解方：從羊隻個體管理到批次分析，從即時感測到 AI 智能建議，再到營養、財務與追溯合規，打造具備跨域洞察力的智慧養殖平台。</p>
+        <div class="grid-cards">
+            <article class="card">
+                <h3>360° 羊群生命週期管理</h3>
+                <p>整合耳號、健康紀錄、事件記錄、成長指標與族群分析，串聯生產、繁殖、醫療到出貨格式，提供全程追蹤與回溯能力。</p>
+            </article>
+            <article class="card">
+                <h3>AI 量身推薦營養策略</h3>
+                <p>導入 LGBM 成長模型、個體／群體營養評估與文獻型 RAG 查詢，引擎自動產出飼料配方建議和乾物質攝入預測。</p>
+            </article>
+            <article class="card">
+                <h3>IoT 監測到自動化控制</h3>
+                <p>透過感測器蒐集體重、體溫、活動量，並可下達自動化控制命令，形成環境控制與健康警報的閉環。</p>
+            </article>
+            <article class="card">
+                <h3>營運指標與財務洞察</h3>
+                <p>即時儀表板顯示存欄、健康、營收、成本與效益，整合收支與批次帳本，支持投資報酬分析與策略模擬。</p>
+            </article>
+        </div>
+    </section>
+
+    <section id="features">
+        <h2 class="section-title">核心模組總覽</h2>
+        <p class="lead">前台 Vue3 + Element Plus 提供操作體驗，後台 Flask 驅動 API 與任務排程，多個子系統共同支援牧場的日常營運。</p>
+        <div class="grid-cards">
+            <article class="card">
+                <div class="module-pill"><strong>前端</strong><span>vue · vite · pinia · vitest</span></div>
+                <h3>智慧控台 & 桌面級 UX</h3>
+                <p>採用 Aurora 風格介面、虛擬化表格、Sheet Mapping Configurator 與多種圖形分析組件，支援深色／亮色主題與快速鍵操作。</p>
+            </article>
+            <article class="card">
+                <div class="module-pill"><strong>後端</strong><span>flask · sqlachemy · celery-like</span></div>
+                <h3>可擴充服務框架</h3>
+                <p>模組化設計涵蓋 activity、agent、auth、BI、finance、IoT、prediction 等 API，結合 Redis cache、任務佇列與 Session 中介層。</p>
+            </article>
+            <article class="card">
+                <div class="module-pill"><strong>AI</strong><span>LGBM · RAG · OpenAI</span></div>
+                <h3>生成式顧問助理</h3>
+                <p>結合嵌入式檢索與 GenAI 模型，提供營養諮詢、事件建議、報表摘要，並具備 verifiable log 追蹤問答歷程。</p>
+            </article>
+            <article class="card">
+                <div class="module-pill"><strong>資料</strong><span>PostgreSQL · Parquet</span></div>
+                <h3>資料湖與向量倉儲</h3>
+                <p>提供羊隻歷史資料、研究文獻 RAG 資料庫與向量化語料集，支援 AI 模型訓練與快速查詢。</p>
+            </article>
+        </div>
+    </section>
+
+    <section id="architecture">
+        <h2 class="section-title">技術架構與運行藍圖</h2>
+        <div class="stacked">
+            <div class="media-block">
+                <h3>雲端部署與服務拓樸</h3>
+                <p>Docker Compose 實作前後端、背景工作者、PostgreSQL、Redis 與向量索引服務。支援 GitHub Actions / Codespaces 快速啟動，並可延伸至 Kubernetes。</p>
+                <img src="docs/picture/backend_class_diagram.svg" alt="Backend class diagram">
+            </div>
+            <div class="media-block">
+                <h3>前端系統設計</h3>
+                <p>採用 Domain-Oriented 模組切分：Analytics、IoT、Sheep、Traceability、Settings。利用 Pinia store 統一狀態，並導入 Vitest + Playwright 測試矩陣。</p>
+                <img src="docs/picture/frontend_component_diagram.svg" alt="Frontend component diagram">
+            </div>
+        </div>
+    </section>
+
+    <section id="ai">
+        <h2 class="section-title">AI / RAG 能力矩陣</h2>
+        <p class="lead">透過 `backend/app/ai` 與 `backend/app/api/agent.py` 模組串聯 AI 推理服務。採用向量檢索搭配大型語言模型，使牧場人員即可對羊場營運提出自然語言問題，獲得具體建議。</p>
+        <div class="grid-cards">
+            <article class="card">
+                <h3>多模型融合預測</h3>
+                <p>LGBM Quantile 模型提供不同情境下的體重成長預測；AI 模組將結果轉換為飼料攝入建議與健康提醒。</p>
+            </article>
+            <article class="card">
+                <h3>RAG 知識庫</h3>
+                <p>收錄 40+ 篇專業文獻（`docs/rag_sources/`），經 Parquet 向量化後可即時檢索引用，確保建議具備學理依據。</p>
+            </article>
+            <article class="card">
+                <h3>Verifiable Log</h3>
+                <p>為每次 AI 交互建立可驗證日誌，結合 `verifiable_log_service.py` 確保決策透明、可稽核。</p>
+            </article>
+            <article class="card">
+                <h3>生成式 UX</h3>
+                <p>前端 ChatView 與 AnalyticsHub 支援自然語言輸入，將使用者需求轉換為報表、圖表與匯出檔案。</p>
+            </article>
+        </div>
+    </section>
+
+    <section id="iot">
+        <h2 class="section-title">IoT 與自動化管線</h2>
+        <div class="grid-cards">
+            <article class="card">
+                <h3>Sensor Streaming</h3>
+                <p>`iot_simulator/iot_simulator.py` 提供完整模擬器，可產生體重、溫度、活動量資料並串流至後端或 MQTT Broker。</p>
+            </article>
+            <article class="card">
+                <h3>Automation Rule Engine</h3>
+                <p>以 `backend/app/api/iot.py` 結合規則引擎與排程器，支援控制飲水、飼料輸送、環境調控等自動命令。</p>
+            </article>
+            <article class="card">
+                <h3>即時告警與指標</h3>
+                <p>DashboardView 提供即時告警、風險評估、對策建議；Tracing 模組串連事件、批次、個體，支援跨時間回顧。</p>
+            </article>
+        </div>
+        <div class="media-block" style="margin-top: 32px;">
+            <h3>Traceability 高擬真示意</h3>
+            <img src="docs/picture/traceability_subsystem_diagram.svg" alt="Traceability subsystem diagram">
+        </div>
+    </section>
+
+    <section id="analytics">
+        <h2 class="section-title">營運分析與商業智能</h2>
+        <p class="lead">BI API 與前端 Analytics 模組提供多層級視角，協助管理層掌握 KPI、群體效益與成本結構。</p>
+        <div class="stacked">
+            <div class="media-block">
+                <h3>動態報表與 KPI 面板</h3>
+                <p>AnalyticsHub 結合 Cohort、Cost-Benefit、Finance Entry 等元件，使用者可客製化欄位、條件，並匯出 CSV / PDF 報告。</p>
+                <img src="docs/frontend/coverage/src/views/DashboardView.vue.html" alt="Dashboard coverage" onerror="this.replaceWith('');">
+            </div>
+            <div class="media-block">
+                <h3>資料治理與匯入管線</h3>
+                <p>`SheetMappingConfigurator` 與 AI Mapping 讓使用者可以匯入不同來源的 Excel 格式，透過 AI 建議自動對應欄位，大幅縮短資料清理時間。</p>
+                <img src="docs/picture/ai_prediction_subsystem_diagram.svg" alt="AI prediction subsystem diagram">
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap">
+        <h2 class="section-title">產品發展路線圖</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>Phase 1 · Minimal Viable Farm Ops</h3>
+                <p>完成羊群管理、AI 成長預測、IoT 感測、儀表板、資料匯入等核心功能，建立智慧牧場基礎。</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Phase 2 · 擴展到跨牧場協作</h3>
+                <p>導入多牧場中央控台、聯邦學習、跨場景報表、支付與銷售整合，打造區域性牧場聯盟。</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Phase 3 · AI 自主決策與 ESG</h3>
+                <p>引入自動餵料策略、碳排監控、水資源管理、生產履歷區塊鏈串接，因應 ESG 與國際貿易追溯要求。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="cta">
+        <div class="cta-card">
+            <h2>準備進入智慧畜牧的下一個世代嗎？</h2>
+            <p>領頭羊博士結合 AI、物聯網與企業級營運分析，協助牧場精準決策、降低成本、提升動物福祉。歡迎聯繫我們，取得 DEMO、技術白皮書或與顧問安排導入規劃。</p>
+            <div class="cta-actions">
+                <a class="cta-primary" href="http://localhost/dashboard">體驗前端 Demo</a>
+                <a class="cta-secondary" href="code_metrics.html">檢視技術指標</a>
+                <a class="cta-secondary" href="docs/README.md">閱讀技術文件</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <span>Goat Nutrition App · 領頭羊博士 · 2025</span>
+        <span>Repo: <a href="https://github.com/nj1i6t6/goat-nutrition-app" target="_blank" rel="noreferrer">github.com/nj1i6t6/goat-nutrition-app</a></span>
+        <span>Made with ❤️ by Goat Nutrition Team · 測試、部署、RAG、IoT 全面整合</span>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card, .media-block, .timeline-item, .hero-visual, .cta-card').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(24px)';
+            observer.observe(el);
+        });
+
+        const style = document.createElement('style');
+        style.innerHTML = `.reveal { opacity: 1 !important; transform: translateY(0) !important; transition: opacity 0.7s ease, transform 0.7s ease; }`;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650">
+<style>
+  text { font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; fill: #1b1b1b; }
+  .title { font-size: 30px; font-weight: bold; }
+  .label { font-size: 18px; }
+  .box { fill: #ffffff; stroke-width: 2.5; rx: 16; ry: 16; }
+  .tier { fill: #f5f5f5; stroke: #bdbdbd; stroke-dasharray: 12 8; stroke-width: 2; }
+  .arrow { stroke: #424242; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+  .accent { font-size: 16px; fill: #424242; }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#424242" />
+  </marker>
+</defs>
+<rect width="100%" height="100%" fill="#fafafa" />
+<text x="550" y="50" text-anchor="middle" class="title">部署架構示意圖 - Goat Nutrition</text>
+
+<!-- Tiers -->
+<rect class="tier" x="70" y="100" width="260" height="480" />
+<text x="200" y="135" text-anchor="middle" class="accent">Client / External</text>
+
+<rect class="tier" x="360" y="100" width="300" height="480" />
+<text x="510" y="135" text-anchor="middle" class="accent">Application 層</text>
+
+<rect class="tier" x="690" y="100" width="340" height="480" />
+<text x="860" y="135" text-anchor="middle" class="accent">資料與工作層</text>
+
+<!-- Client -->
+<rect class="box" x="110" y="180" width="200" height="120" stroke="#039be5" />
+<text x="210" y="230" text-anchor="middle" class="label">Client</text>
+<text x="210" y="260" text-anchor="middle" class="accent">瀏覽器 / 行動裝置</text>
+
+<!-- External Gemini -->
+<rect class="box" x="110" y="360" width="200" height="120" stroke="#8e24aa" />
+<text x="210" y="410" text-anchor="middle" class="label">Gemini API</text>
+<text x="210" y="440" text-anchor="middle" class="accent">LLM 推論服務</text>
+
+<!-- Frontend -->
+<rect class="box" x="400" y="200" width="220" height="100" stroke="#fb8c00" />
+<text x="510" y="240" text-anchor="middle" class="label">Frontend</text>
+<text x="510" y="265" text-anchor="middle" class="accent">Nginx / Vite 產出</text>
+
+<!-- Backend -->
+<rect class="box" x="400" y="360" width="220" height="120" stroke="#43a047" />
+<text x="510" y="410" text-anchor="middle" class="label">Backend</text>
+<text x="510" y="440" text-anchor="middle" class="accent">Flask API</text>
+
+<!-- Worker -->
+<rect class="box" x="740" y="200" width="240" height="110" stroke="#d32f2f" />
+<text x="860" y="245" text-anchor="middle" class="label">Worker</text>
+<text x="860" y="275" text-anchor="middle" class="accent">RQ / 背景任務</text>
+
+<!-- Database -->
+<rect class="box" x="740" y="360" width="130" height="130" stroke="#3949ab" />
+<text x="805" y="415" text-anchor="middle" class="label">PostgreSQL</text>
+<text x="805" y="445" text-anchor="middle" class="accent">交易資料</text>
+
+<!-- Redis -->
+<rect class="box" x="900" y="360" width="130" height="130" stroke="#c62828" />
+<text x="965" y="415" text-anchor="middle" class="label">Redis</text>
+<text x="965" y="445" text-anchor="middle" class="accent">快取 / 佇列</text>
+
+<!-- Arrows -->
+<path class="arrow" d="M310 240 L400 240" />
+<path class="arrow" d="M510 300 L510 360" />
+<path class="arrow" d="M620 420 L740 420" />
+<path class="arrow" d="M870 420 L900 420" />
+<path class="arrow" d="M510 360 L740 255" />
+<path class="arrow" d="M510 420 L870 255" />
+<path class="arrow" d="M310 420 L400 420" />
+<path class="arrow" d="M870 470 L870 545 L210 545 L210 480" />
+
+<text x="610" y="230" class="accent">提供靜態資源</text>
+<text x="610" y="345" class="accent">API 請求</text>
+<text x="700" y="390" class="accent">資料持久化</text>
+<text x="950" y="470" class="accent">排程任務/快取</text>
+<text x="630" y="500" class="accent">LLM 輸入/輸出</text>
+
+</svg>

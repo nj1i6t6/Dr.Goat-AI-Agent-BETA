@@ -1,0 +1,114 @@
+# 領頭羊博士 (Dr. Goat) 系統升級與重構藍圖 v2.0
+
+## 1. 系統環境與框架升級 (System Upgrade)
+**目標**：確保系統處於最新且穩定的技術基礎，提升效能與安全性。
+- **核心版本更新**：
+  - **Python**：升級至 3.11+ (兼顧效能與穩定性，不追求不穩定的開發中版本)。
+  - **PostgreSQL**：升級至 16+ (最新穩定版)。
+  - **Google Gen AI SDK**：更新至最新版以支援 Gemini 3.0 功能。
+  - **Frontend**：Vue 3 + Vite + Element Plus 更新至最新穩定版。
+
+## 2. RAG 與數據架構重構 (RAG & Data Architecture)
+**目標**：優化現有本地 RAG 效能，並為未來雲端遷移做好準備 (Hybrid Ready)。
+- **PDF 知識庫 (Unstructured Data)**：
+  - **現階段 (Local Optimization)**：
+    - **保留**：暫時保留本地 FAISS 與 `rag_loader.py` 架構 (因暫無 API Key)。
+    - **優化**：重構 RAG 介面 (Interface)，將後端實作抽象化。確保未來切換至 Google File Search 時，只需更換 Adapter 而不需改動業務邏輯。
+    - **修復**：檢查並修復現有 `rag_loader.py` 中的效能瓶頸或錯誤。
+  - **未來規劃 (Cloud Migration)**：待 API Key 就緒後，棄用本地向量庫，全面轉向 Google File Search API。
+- **Excel/CSV 數據分析 (Structured Data)**：
+  - **策略**：不存入 RAG Vector Store。
+  - **實作**：採用 **File API (48小時暫存)** 搭配 **Gemini Code Execution**。上傳檔案後讓 AI 撰寫 Python 程式碼直接運算數據，提升準確度。
+
+## 3. 後端架構重構 (Backend Refactoring)
+**目標**：建立符合真實農場運作的層級架構與權限管理，並解決高複雜度模組的技術債。
+- **資料庫層級重整 (Foundation)**：
+  - **新結構**：建立 `Farm` (農場) → `Area` (區) → `Shed` (舍) → `Pen` (欄) → `Sheep` (羊) 的完整層級。
+  - **改動**：`Sheep` 不再直接綁定 `User`，而是綁定 `Pen`。
+  - **注意**：**不需保留舊資料，直接重建資料表結構 (Drop & Recreate)。**
+- **權限管理與註冊流程 (RBAC & Registration)**：
+  - **新增角色**：Owner (場主)、Manager (管理員)、Worker (員工)、Vet (獸醫)。
+  - **註冊/邀請流程**：
+    1.  **場主 (Owner)**：註冊後建立農場，系統生成唯一的「農場代碼 (Farm Code)」。
+    2.  **員工/管理員 (Worker/Manager)**：註冊時輸入「農場代碼」，帳號自動進入該農場的「待審核列表」。
+    3.  **審核與授權**：場主在管理後台核准申請，並分配角色權限 (如：Worker 只能讀取，Manager 可編輯)。
+  - **獸醫 (Vet) 特殊邏輯**：
+    - 獸醫帳號獨立於單一農場。
+    - 透過「邀請連結」或「多組農場代碼」加入多個農場，實現一個帳號管理多個案場。
+  - **實作**：後端加入 `@role_required` 裝飾器，並支援針對個別帳號進行細微權限微調 (Fine-grained Permission)。
+- **模組化與降維 (Modularization & Complexity Reduction)**：
+  - **目標**：針對 `docs/code_metrics.md` 中標示為 F/E 級的高複雜度模組進行重構。
+  - **重點重構對象**：
+    1.  `backend/app/api/prediction.py` (`_compute_prediction_metrics`, `_normalize_category`)：拆分為獨立的 `PredictionService` 與 `DataNormalizationUtils`。
+    2.  `backend/app/api/data_management.py` (`process_import`)：將匯入邏輯拆解為 `ImportStrategy` 模式，分離驗證、轉換與寫入邏輯。
+    3.  `backend/app/api/bi.py` (`_cost_benefit`, `_cohort_analysis`)：將財務計算邏輯移至 `FinanceService`，保持 API 層輕量化。
+    4.  `backend/app/api/dashboard.py` (`get_dashboard_data`)：改用 Aggregation Query 或 Materialized View 減少 Python 層的資料處理負擔。
+
+## 4. 農務邏輯與 AI 決策 (Business Logic)
+**目標**：移除不實用的 ML 模型，導入統計分析與自動化規則。
+- **生長監控 (Growth Monitoring)**：
+  - **移除**：移除現有的 LightGBM/LSTM 預測模型 (準確度不足)。
+  - **新增**：實作 **統計模型 (PR值/百分等級)**。計算羊隻體重在群體中的 PR 值與標準曲線落點，抓出落後個體。
+- **繁殖管理模組 (Breeding Management)**：
+  - **新增介面**：目前專案缺乏專屬配種介面，需新增「繁殖管理」頁面，專門處理配種、懷孕檢查、分娩等事件。
+  - **近親繁殖警告**：在上述新介面中，當使用者選擇公母羊進行配種時，系統自動比對雙方 `Sire` (父) 與 `Dam` (母)，若有血緣關係顯示紅色警告。
+- **飼料與 FCR (Feed & Efficiency)**：
+  - **新增**：`FeedItem` (庫存) 與 `FeedingRecord` (投餵) 資料表。
+  - **計算與顯示**：實作 FCR (換肉率) 計算邏輯，並**同步更新儀表板 (Dashboard) 中的 ESG 顯示區域**，確保數據反映真實飼養效率。
+- **批次操作 (Batch Operations)**：
+  - **功能**：支援以「欄 (Pen)」為單位的批次動作 (如：整欄打疫苗、整欄 AI 諮詢)。
+
+## 5. 前端體驗與 App 化 (Frontend & UX)
+**目標**：解決現場網路不穩與操作不便問題。
+- **PWA 離線同步**：
+  - 導入 `vite-plugin-pwa` 與 Service Worker。
+  - 實作 IndexedDB 暫存：斷網時存手機，連網後背景上傳。
+- **語音輸入 (Voice Input)**：
+  - **用途**：
+    1.  **事件紀錄**：在現場手髒無法打字時，用語音快速輸入「耳號 123 體重 50 公斤」。
+    2.  **AI 諮詢**：直接用語音與 Dr. Goat 進行對話諮詢。
+  - **技術**：使用 Web Speech API 錄音轉文字。
+- **羊隻成長相簿**：
+  - 新增 `SheepPhoto` 資料表，對話圖片自動歸檔。
+- **LINE 整合**：
+  - 實作 LINE Login 與智慧通知路由 (一般訊息 PWA Push，緊急訊息 LINE Push)。
+  - 增加 LINE 瀏覽器防呆機制。
+
+## 3. 後端架構重構 (Backend Refactoring)
+**目標**：建立符合真實農場運作的層級架構與權限管理。
+- **資料庫層級重整 (Foundation)**：
+  - **新結構**：建立 `Farm` (農場) → `Area` (區) → `Shed` (舍) → `Pen` (欄) → `Sheep` (羊) 的完整層級。
+  - **改動**：`Sheep` 不再直接綁定 `User`，而是綁定 `Pen`。
+  - **注意**：**不需保留舊資料，直接重建資料表結構 (Drop & Recreate)。**
+- **權限管理 (RBAC)**：
+  - **新增角色**：Owner (場主)、Manager (管理員)、Worker (員工)、Vet (獸醫)。
+  - **實作**：後端加入 `@role_required` 裝飾器控制 API 存取權限。
+
+## 4. 農務邏輯與 AI 決策 (Business Logic)
+**目標**：移除不實用的 ML 模型，導入統計分析與自動化規則。
+- **生長監控 (Growth Monitoring)**：
+  - **移除**：移除現有的 LightGBM 預測模型 (準確度不足)。
+  - **新增**：實作 **統計模型 (PR值/百分等級)**。計算羊隻體重在群體中的 PR 值與標準曲線落點，抓出落後個體。
+- **近親繁殖警告 (Inbreeding Warning)**：
+  - **邏輯**：配種介面自動比對公母羊的 `Sire` (父) 與 `Dam` (母)，若有血緣關係顯示紅色警告。
+- **飼料與 FCR (Feed & Efficiency)**：
+  - **新增**：`FeedItem` (庫存) 與 `FeedingRecord` (投餵) 資料表。
+  - **計算**：實作 FCR (換肉率) 計算邏輯，結合財務模組分析成本。
+- **批次操作 (Batch Operations)**：
+  - **功能**：支援以「欄 (Pen)」為單位的批次動作 (如：整欄打疫苗、整欄 AI 諮詢)。
+
+## 5. 前端體驗與 App 化 (Frontend & UX)
+**目標**：解決現場網路不穩與操作不便問題。
+- **PWA 離線同步**：
+  - 導入 `vite-plugin-pwa` 與 Service Worker。
+  - 實作 IndexedDB 暫存：斷網時存手機，連網後背景上傳。
+- **語音輸入**：
+  - 使用 Web Speech API 錄音轉文字，解決手髒無法打字問題。
+- **羊隻成長相簿**：
+  - 新增 `SheepPhoto` 資料表，對話圖片自動歸檔。
+- **LINE 整合**：
+  - 實作 LINE Login 與智慧通知路由 (一般訊息 PWA Push，緊急訊息 LINE Push)。
+  - 增加 LINE 瀏覽器防呆機制。
+
+## 6. IoT 功能擴充
+- **規則引擎**：實作前端頁面以設定 IoT 自動化規則 (Automation Rules)。

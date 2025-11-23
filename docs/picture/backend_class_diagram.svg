@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="750" viewBox="0 0 1250 750">
+<style>
+  text { font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; fill: #1b1b1b; }
+  .title { font-size: 30px; font-weight: bold; }
+  .module { fill: #ffffff; stroke-width: 2.7; rx: 18; ry: 18; }
+  .api { stroke: #1565c0; }
+  .core { stroke: #2e7d32; }
+  .support { stroke: #6a1b9a; }
+  .worker { stroke: #d84315; }
+  .queue { fill: #fff3e0; stroke: #fb8c00; stroke-width: 2.5; }
+  .label { font-size: 20px; font-weight: 600; }
+  .path { font-size: 16px; fill: #424242; }
+  .note { font-size: 15px; fill: #616161; }
+  .accent { font-size: 15px; fill: #455a64; font-style: italic; }
+  .arrow { stroke: #455a64; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#455a64" />
+  </marker>
+</defs>
+<rect width="100%" height="100%" fill="#f9fbff" />
+<text x="625" y="55" text-anchor="middle" class="title">後端模組關係圖 - Goat Nutrition</text>
+
+<!-- API Blueprints -->
+<rect class="module api" x="90" y="160" width="230" height="120" />
+<text text-anchor="middle">
+  <tspan x="205" y="210" class="label">Sheep API</tspan>
+  <tspan x="205" y="236" class="path">app/api/sheep.py</tspan>
+  <tspan x="205" y="262" class="note">羊群 CRUD 與事件管理</tspan>
+</text>
+
+<rect class="module api" x="480" y="150" width="250" height="130" />
+<text text-anchor="middle">
+  <tspan x="605" y="200" class="label">Agent API</tspan>
+  <tspan x="605" y="226" class="path">app/api/agent.py</tspan>
+  <tspan x="605" y="252" class="note">AI 提示增強與回覆生成</tspan>
+</text>
+
+<rect class="module api" x="890" y="160" width="230" height="120" />
+<text text-anchor="middle">
+  <tspan x="1005" y="210" class="label">IoT API</tspan>
+  <tspan x="1005" y="236" class="path">app/api/iot.py</tspan>
+  <tspan x="1005" y="262" class="note">裝置註冊、資料上報與任務入列</tspan>
+</text>
+
+<!-- Core Models -->
+<rect class="module core" x="470" y="340" width="280" height="140" />
+<text text-anchor="middle">
+  <tspan x="610" y="390" class="label">Models</tspan>
+  <tspan x="610" y="416" class="path">app/models.py</tspan>
+  <tspan x="610" y="442" class="note">SQLAlchemy ORM 與資料表定義</tspan>
+</text>
+
+<!-- Support Modules -->
+<rect class="module support" x="90" y="520" width="260" height="130" />
+<text text-anchor="middle">
+  <tspan x="220" y="570" class="label">RAG Ingest</tspan>
+  <tspan x="220" y="596" class="path">scripts/ingest_docs.py</tspan>
+  <tspan x="220" y="622" class="note">文件切塊、向量化與 Parquet 儲存</tspan>
+</text>
+
+<rect class="module support" x="420" y="520" width="260" height="130" />
+<text text-anchor="middle">
+  <tspan x="550" y="570" class="label">RAG Loader</tspan>
+  <tspan x="550" y="596" class="path">app/rag_loader.py</tspan>
+  <tspan x="550" y="622" class="note">載入 FAISS 索引、檢索最相關知識</tspan>
+</text>
+
+<rect class="module support" x="750" y="520" width="240" height="130" />
+<text text-anchor="middle">
+  <tspan x="870" y="570" class="label">Utilities</tspan>
+  <tspan x="870" y="596" class="path">app/utils.py</tspan>
+  <tspan x="870" y="622" class="note">Gemini API 包裝與共用工具</tspan>
+</text>
+
+<!-- Worker -->
+<rect class="module worker" x="990" y="520" width="220" height="130" />
+<text text-anchor="middle">
+  <tspan x="1100" y="570" class="label">Automation Worker</tspan>
+  <tspan x="1100" y="596" class="path">app/iot/automation.py</tspan>
+  <tspan x="1100" y="622" class="note">Redis 任務監聽與規則觸發</tspan>
+</text>
+
+<!-- Redis Queue -->
+<ellipse class="queue" cx="1040" cy="380" rx="85" ry="45" />
+<text text-anchor="middle">
+  <tspan x="1040" y="378" class="label">Redis Queue</tspan>
+  <tspan x="1040" y="404" class="note">app/simple_queue.py</tspan>
+</text>
+
+<!-- Relationships -->
+<path class="arrow" d="M205 280 C 205 330, 360 340, 470 360" />
+<path class="arrow" d="M605 280 L 610 340" />
+<path class="arrow" d="M995 280 C 920 330, 820 340, 750 360" />
+<path class="arrow" d="M330 585 L 420 585" />
+<path class="arrow" d="M550 520 C 560 420, 580 330, 600 280" />
+<path class="arrow" d="M870 520 C 820 450, 760 360, 720 320" />
+<path class="arrow" d="M995 280 L 1035 335" />
+<path class="arrow" d="M1035 425 L 1095 520" />
+<path class="arrow" d="M1095 520 C 960 470, 820 410, 750 400" />
+
+<text x="360" y="330" class="accent">SQLAlchemy 操作</text>
+<text x="700" y="360" class="accent">狀態更新</text>
+<text x="360" y="560" class="accent">文件 → 向量索引</text>
+<text x="710" y="470" class="accent">Gemini 輔助推論</text>
+<text x="1025" y="320" class="accent">任務入列</text>
+<text x="1100" y="470" class="accent">自動化處理</text>
+
+</svg>

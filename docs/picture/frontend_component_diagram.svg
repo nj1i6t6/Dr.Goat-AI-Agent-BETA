@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="720" viewBox="0 0 1300 720">
+<style>
+  text { font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; fill: #1b1b1b; }
+  .title { font-size: 30px; font-weight: bold; }
+  .section { fill: #f5f9ff; stroke: #b0bec5; stroke-dasharray: 12 8; stroke-width: 2; rx: 22; ry: 22; }
+  .module { fill: #ffffff; stroke-width: 2.6; rx: 18; ry: 18; }
+  .view { stroke: #00897b; }
+  .store { stroke: #5e35b1; }
+  .api { stroke: #1e88e5; }
+  .label { font-size: 22px; font-weight: 600; }
+  .path { font-size: 16px; fill: #424242; }
+  .note { font-size: 15px; fill: #616161; }
+  .arrow { stroke: #546e7a; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+  .dashed { stroke-dasharray: 8 6; }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#546e7a" />
+  </marker>
+</defs>
+<rect width="100%" height="100%" fill="#f0f4f8" />
+<text x="650" y="55" text-anchor="middle" class="title">前端元件架構圖 - Goat Nutrition</text>
+
+<!-- Sections -->
+<rect class="section" x="80" y="110" width="360" height="520" />
+<text x="260" y="150" text-anchor="middle" class="note">Views</text>
+
+<rect class="section" x="470" y="110" width="360" height="520" />
+<text x="650" y="150" text-anchor="middle" class="note">Pinia Stores</text>
+
+<rect class="section" x="860" y="110" width="360" height="520" />
+<text x="1040" y="150" text-anchor="middle" class="note">API Layer</text>
+
+<!-- Views -->
+<rect class="module view" x="120" y="210" width="280" height="140" />
+<text text-anchor="middle">
+  <tspan x="260" y="260" class="label">SheepListView</tspan>
+  <tspan x="260" y="288" class="path">views/SheepListView.vue</tspan>
+  <tspan x="260" y="316" class="note">渲染羊群列表，透過 store 讀/寫資料</tspan>
+</text>
+
+<rect class="module view" x="120" y="400" width="280" height="140" />
+<text text-anchor="middle">
+  <tspan x="260" y="450" class="label">DashboardView</tspan>
+  <tspan x="260" y="478" class="path">views/DashboardView.vue</tspan>
+  <tspan x="260" y="506" class="note">儀表板聚合數據，直接呼叫 API</tspan>
+</text>
+
+<!-- Stores -->
+<rect class="module store" x="510" y="200" width="280" height="150" />
+<text text-anchor="middle">
+  <tspan x="650" y="250" class="label">Auth Store</tspan>
+  <tspan x="650" y="278" class="path">stores/auth.js</tspan>
+  <tspan x="650" y="306" class="note">管理 Token 與登入狀態</tspan>
+</text>
+
+<rect class="module store" x="510" y="400" width="280" height="150" />
+<text text-anchor="middle">
+  <tspan x="650" y="450" class="label">Sheep Store</tspan>
+  <tspan x="650" y="478" class="path">stores/sheep.js</tspan>
+  <tspan x="650" y="506" class="note">封裝羊群 API 呼叫與狀態</tspan>
+</text>
+
+<!-- API Client -->
+<rect class="module api" x="900" y="300" width="280" height="160" />
+<text text-anchor="middle">
+  <tspan x="1040" y="350" class="label">API Client</tspan>
+  <tspan x="1040" y="378" class="path">api/index.js</tspan>
+  <tspan x="1040" y="406" class="note">集中管理 Axios 請求與錯誤處理</tspan>
+</text>
+
+<!-- Relationships -->
+<path class="arrow" d="M400 290 L 510 290" />
+<text x="450" y="270" class="note">使用 actions</text>
+
+<path class="arrow" d="M400 470 L 900 360" />
+<text x="650" y="360" class="note">直接呼叫 API Client</text>
+
+<path class="arrow" d="M790 470 L 900 380" />
+<text x="820" y="430" class="note">封裝 API 呼叫</text>
+
+<path class="arrow dashed" d="M790 250 L 900 330" />
+<text x="830" y="300" class="note">附加認證標頭</text>
+
+<path class="arrow" d="M260 400 L 260 350" marker-end="url(#arrowhead)" />
+<text x="180" y="370" class="note">列表更新</text>
+
+<path class="arrow dashed" d="M260 180 C 260 150, 650 150, 650 180" />
+<text x="650" y="140" class="note">登入狀態提供給視圖</text>
+
+</svg>

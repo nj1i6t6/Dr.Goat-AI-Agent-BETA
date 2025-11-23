@@ -1,0 +1,104 @@
+@import '../../styles/tokens/aurora-theme.css';
+
+:root {
+  font-family: var(--aurora-font-sans);
+  line-height: 1.65;
+  font-size: 100%;
+  --el-font-size-base: 1rem;
+  color: var(--aurora-text-primary);
+  background: var(--aurora-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+html[data-font-scale='large'] {
+  font-size: 112.5%;
+  --el-font-size-base: 1.125rem;
+}
+
+html[data-font-scale='extra-large'] {
+  font-size: 125%;
+  --el-font-size-base: 1.25rem;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--aurora-bg);
+  color: var(--aurora-text-primary);
+  transition: background 400ms ease, color var(--aurora-transition-base);
+}
+
+body .el-container {
+  min-height: 100%;
+}
+
+::selection {
+  background-color: rgba(45, 212, 191, 0.35);
+  color: var(--aurora-selection-text);
+}
+
+.aurora-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(45, 212, 191, 0.45) transparent;
+}
+
+.aurora-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.aurora-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.05);
+  border-radius: 999px;
+}
+
+.aurora-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.7), rgba(56, 189, 248, 0.65));
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.aurora-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.85), rgba(56, 189, 248, 0.82));
+}
+
+.el-drawer__header {
+  margin-bottom: 0 !important;
+  padding-bottom: 0.9375rem !important;
+}
+
+.el-table .sort-caret {
+  display: inline-flex !important;
+}
+
+.el-table th.is-sortable .cell {
+  cursor: pointer;
+}
+
+.el-empty__description {
+  color: var(--aurora-text-muted);
+}
+
+.el-button.is-plain {
+  backdrop-filter: var(--aurora-backdrop-blur);
+}
+
+.aurora-glass-surface {
+  background: var(--aurora-surface);
+  backdrop-filter: var(--aurora-backdrop-blur);
+  box-shadow: var(--aurora-shadow-soft);
+  border: 1px solid var(--aurora-border);
+  border-radius: var(--aurora-card-radius);
+  transition: transform var(--aurora-transition-base), box-shadow var(--aurora-transition-base);
+}
+
+.aurora-glass-surface:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--aurora-shadow-strong);
+}

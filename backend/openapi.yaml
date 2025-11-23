@@ -1,0 +1,883 @@
+openapi: 3.0.3
+info:
+  title: Goat Nutrition App API
+  version: 0.1.0
+  description: |
+    Minimal OpenAPI for key endpoints. Auth uses cookie session (Flask-Login).
+servers:
+  - url: http://localhost:5001
+paths:
+  /api/auth/register:
+    post:
+      summary: Register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: { type: string }
+                password: { type: string, format: password }
+      responses:
+        '201': { description: Created }
+        '400': { description: Bad Request }
+        '409': { description: Conflict }
+  /api/auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: { type: string }
+                password: { type: string, format: password }
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+  /api/auth/logout:
+    post:
+      summary: Logout
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+  /api/auth/status:
+    get:
+      summary: Auth status
+      responses:
+        '200': { description: OK }
+  /api/auth/health:
+    get:
+      summary: Health check
+      responses:
+        '200': { description: Healthy }
+        '503': { description: Unhealthy }
+  /api/sheep/:
+    get:
+      summary: List sheep (current user)
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+    post:
+      summary: Create sheep
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [EarNum]
+              properties:
+                EarNum: { type: string }
+                Breed: { type: string }
+                Sex: { type: string }
+                BirthDate: { type: string }
+      responses:
+        '201': { description: Created }
+        '400': { description: Validation error }
+        '409': { description: Duplicate EarNum }
+  /api/sheep/{ear_num}:
+    parameters:
+      - in: path
+        name: ear_num
+        required: true
+        schema: { type: string }
+    get:
+      summary: Get one sheep (with events)
+      responses:
+        '200': { description: OK }
+        '404': { description: Not Found }
+    put:
+      summary: Update sheep (records history for key fields)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200': { description: OK }
+        '400': { description: Validation error }
+        '404': { description: Not Found }
+    delete:
+      summary: Delete sheep
+      responses:
+        '200': { description: OK }
+        '404': { description: Not Found }
+  /api/sheep/{ear_num}/events:
+    parameters:
+      - in: path
+        name: ear_num
+        required: true
+        schema: { type: string }
+    get:
+      summary: List events
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Add event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [event_date, event_type]
+              properties:
+                event_date: { type: string }
+                event_type: { type: string }
+                description: { type: string }
+                medication: { type: string }
+                withdrawal_days: { type: integer }
+      responses:
+        '201': { description: Created }
+  /api/sheep/events/{event_id}:
+    parameters:
+      - in: path
+        name: event_id
+        required: true
+        schema: { type: integer }
+    put:
+      summary: Update event
+      responses:
+        '200': { description: OK }
+    delete:
+      summary: Delete event
+      responses:
+        '200': { description: OK }
+  /api/sheep/{ear_num}/history:
+    parameters:
+      - in: path
+        name: ear_num
+        required: true
+        schema: { type: string }
+    get:
+      summary: List historical data
+      responses:
+        '200': { description: OK }
+  /api/sheep/history/{record_id}:
+    parameters:
+      - in: path
+        name: record_id
+        required: true
+        schema: { type: integer }
+    delete:
+      summary: Delete historical record
+      responses:
+        '200': { description: OK }
+  /api/data/export_excel:
+    get:
+      summary: Export all data as Excel
+      responses:
+        '200': { description: File stream }
+  /api/data/analyze_excel:
+    post:
+      summary: Analyze uploaded Excel structure
+      responses:
+        '200': { description: OK }
+        '400': { description: Bad Request }
+  /api/data/process_import:
+    post:
+      summary: Import data from Excel (default template or custom mapping)
+      responses:
+        '200': { description: OK }
+        '400': { description: Bad Request }
+  /api/dashboard/data:
+    get:
+      summary: Dashboard aggregates
+      responses:
+        '200': { description: OK }
+  /api/dashboard/farm_report:
+    get:
+      summary: Farm report
+      responses:
+        '200': { description: OK }
+  /api/dashboard/event_options:
+    get:
+      summary: Event type/description options
+      responses:
+        '200': { description: OK }
+  /api/dashboard/event_types:
+    post:
+      summary: Add event type
+      responses:
+        '201': { description: Created }
+  /api/dashboard/event_types/{type_id}:
+    parameters:
+      - in: path
+        name: type_id
+        required: true
+        schema: { type: integer }
+    delete:
+      summary: Delete event type
+      responses:
+        '200': { description: OK }
+  /api/dashboard/event_descriptions:
+    post:
+      summary: Add event description
+      responses:
+        '201': { description: Created }
+  /api/dashboard/event_descriptions/{desc_id}:
+    parameters:
+      - in: path
+        name: desc_id
+        required: true
+        schema: { type: integer }
+    delete:
+      summary: Delete event description
+      responses:
+        '200': { description: OK }
+  /api/agent/tip:
+    get:
+      summary: Daily tip (requires X-Api-Key)
+      parameters:
+        - in: header
+          name: X-Api-Key
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+        '401': { description: Missing API key }
+  /api/agent/recommendation:
+    post:
+      summary: Nutrition recommendation
+      parameters:
+        - in: header
+          name: X-Api-Key
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                EarNum: { type: string }
+                Breed: { type: string }
+                Body_Weight_kg: { type: number }
+                Age_Months: { type: integer }
+                Sex: { type: string }
+                status: { type: string }
+                target_average_daily_gain_g: { type: number }
+                milk_yield_kg_day: { type: number }
+                milk_fat_percentage: { type: number }
+                number_of_fetuses: { type: integer }
+                other_remarks: { type: string }
+      responses:
+        '200': { description: OK }
+        '400': { description: Validation error }
+  /api/agent/chat:
+    post:
+      summary: Chat with AI (text or image multipart)
+      parameters:
+        - in: header
+          name: X-Api-Key
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message, session_id]
+              properties:
+                message: { type: string }
+                session_id: { type: string }
+                ear_num_context: { type: string }
+          multipart/form-data:
+            schema:
+              type: object
+              required: [message, session_id]
+              properties:
+                message: { type: string }
+                session_id: { type: string }
+                ear_num_context: { type: string }
+                image: { type: string, format: binary }
+      responses:
+        '200': { description: OK }
+        '400': { description: Validation error }
+  /api/prediction/goats/{ear_tag}/prediction:
+    parameters:
+      - in: path
+        name: ear_tag
+        required: true
+        schema: { type: string }
+      - in: query
+        name: target_days
+        required: false
+        schema: { type: integer, default: 30 }
+      - in: header
+        name: X-Api-Key
+        required: true
+        schema: { type: string }
+    get:
+      summary: Linear regression growth prediction (+ optional AI explanation)
+      responses:
+        '200': { description: OK }
+        '400': { description: Insufficient data }
+  /api/prediction/goats/{ear_tag}/prediction/chart-data:
+    parameters:
+      - in: path
+        name: ear_tag
+        required: true
+        schema: { type: string }
+      - in: query
+        name: target_days
+        required: false
+        schema: { type: integer, default: 30 }
+      - in: header
+        name: X-Api-Key
+        required: true
+        schema: { type: string }
+    get:
+      summary: Chart data for prediction
+      responses:
+        '200': { description: OK }
+        '400': { description: Insufficient data }
+  /api/iot/devices:
+    get:
+      summary: List IoT devices for current user
+      security:
+        - cookieAuth: []
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+    post:
+      summary: Register a new IoT device
+      description: |
+        Returns device metadata and a one-time `api_key` field. The API key is only returned in this response and
+        cannot be retrieved afterwards.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201': { description: Created with one-time API key }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+  /api/iot/devices/{device_id}:
+    parameters:
+      - in: path
+        name: device_id
+        required: true
+        schema: { type: integer }
+    get:
+      summary: Retrieve IoT device details
+      security:
+        - cookieAuth: []
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+        '404': { description: Not Found }
+    put:
+      summary: Update IoT device metadata
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200': { description: Updated }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+        '404': { description: Not Found }
+    delete:
+      summary: Remove IoT device
+      security:
+        - cookieAuth: []
+      responses:
+        '200': { description: Deleted }
+        '401': { description: Unauthorized }
+        '404': { description: Not Found }
+  /api/iot/ingest:
+    post:
+      summary: Ingest sensor data from IoT device
+      description: Requires `X-API-Key` header signed with device secret. Returns 201 on success.
+      parameters:
+        - in: header
+          name: X-API-Key
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: object
+      responses:
+        '201': { description: Accepted and enqueued }
+        '400': { description: Invalid payload }
+        '401': { description: Missing or invalid API key }
+  /api/iot/rules:
+    get:
+      summary: List automation rules
+      security:
+        - cookieAuth: []
+      responses:
+        '200': { description: OK }
+        '401': { description: Unauthorized }
+    post:
+      summary: Create automation rule
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201': { description: Created }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+  /api/iot/rules/{rule_id}:
+    parameters:
+      - in: path
+        name: rule_id
+        required: true
+        schema: { type: integer }
+    put:
+      summary: Update automation rule
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200': { description: Updated }
+        '400': { description: Validation error }
+        '401': { description: Unauthorized }
+        '404': { description: Not Found }
+    delete:
+      summary: Delete automation rule
+      security:
+        - cookieAuth: []
+      responses:
+        '200': { description: Deleted }
+        '401': { description: Unauthorized }
+        '404': { description: Not Found }
+  /api/verify/chain:
+    get:
+      summary: Verify verifiable ledger chain integrity
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: query
+          name: start_id
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+        - in: query
+          name: entity_type
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: entity_id
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: include_entries
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Chain verified without issues
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyChainResponse'
+        '409':
+          description: Chain integrity failure detected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyChainResponse'
+  /api/finance/costs:
+    get:
+      summary: List cost entries
+      responses:
+        '200':
+          description: Cost entry list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinanceEntryListResponse'
+    post:
+      summary: Create cost entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinanceEntryPayload'
+      responses:
+        '201': { description: Created }
+        '400': { description: Validation error }
+  /api/finance/costs/{entry_id}:
+    put:
+      summary: Update cost entry
+      parameters:
+        - in: path
+          name: entry_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinanceEntryUpdate'
+      responses:
+        '200': { description: Updated }
+        '404': { description: Not found }
+    delete:
+      summary: Delete cost entry
+      parameters:
+        - in: path
+          name: entry_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200': { description: Deleted }
+        '404': { description: Not found }
+  /api/finance/costs/bulk-import:
+    post:
+      summary: Bulk import cost entries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entries:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FinanceEntryPayload'
+      responses:
+        '201': { description: Imported }
+        '400': { description: Validation error }
+  /api/finance/revenues:
+    get:
+      summary: List revenue entries
+      responses:
+        '200':
+          description: Revenue entry list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinanceEntryListResponse'
+    post:
+      summary: Create revenue entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinanceEntryPayload'
+      responses:
+        '201': { description: Created }
+        '400': { description: Validation error }
+  /api/finance/revenues/{entry_id}:
+    put:
+      summary: Update revenue entry
+      parameters:
+        - in: path
+          name: entry_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinanceEntryUpdate'
+      responses:
+        '200': { description: Updated }
+        '404': { description: Not found }
+    delete:
+      summary: Delete revenue entry
+      parameters:
+        - in: path
+          name: entry_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200': { description: Deleted }
+        '404': { description: Not found }
+  /api/finance/revenues/bulk-import:
+    post:
+      summary: Bulk import revenue entries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entries:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FinanceEntryPayload'
+      responses:
+        '201': { description: Imported }
+        '400': { description: Validation error }
+  /api/bi/cohort-analysis:
+    post:
+      summary: Cohort analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CohortAnalysisRequest'
+      responses:
+        '200':
+          description: Cohort metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortAnalysisResponse'
+        '400': { description: Validation error }
+        '429': { description: Rate limited }
+  /api/bi/cost-benefit:
+    post:
+      summary: Cost benefit aggregation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostBenefitRequest'
+      responses:
+        '200':
+          description: Cost benefit summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostBenefitResponse'
+        '400': { description: Validation error }
+        '429': { description: Rate limited }
+  /api/agent/analytics-report:
+    post:
+      summary: Generate analytics report via AI
+      parameters:
+        - in: header
+          name: X-Api-Key
+          required: true
+          schema:
+            type: string
+          description: Gemini API key used for report generation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticsReportRequest'
+      responses:
+        '200':
+          description: Report generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report_html: { type: string }
+                  report_markdown: { type: string }
+        '400': { description: Validation error }
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
+  schemas:
+    FinanceEntryPayload:
+      type: object
+      required: [recorded_at, category, amount]
+      properties:
+        recorded_at: { type: string, format: date-time }
+        category: { type: string }
+        subcategory: { type: string }
+        label: { type: string }
+        amount: { type: number }
+        currency: { type: string }
+        sheep_id: { type: integer, nullable: true }
+        breed: { type: string, nullable: true }
+        age_months: { type: integer, nullable: true }
+        lactation_number: { type: integer, nullable: true }
+        production_stage: { type: string, nullable: true }
+        notes: { type: string, nullable: true }
+        extra_metadata:
+          type: object
+          additionalProperties: true
+    FinanceEntryUpdate:
+      allOf:
+        - $ref: '#/components/schemas/FinanceEntryPayload'
+      required: []
+    FinanceEntry:
+      allOf:
+        - $ref: '#/components/schemas/FinanceEntryPayload'
+      properties:
+        id: { type: integer }
+    FinanceEntryListResponse:
+      type: object
+      properties:
+        total: { type: integer }
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinanceEntry'
+    CohortAnalysisRequest:
+      type: object
+      properties:
+        filters:
+          type: object
+        time_range:
+          type: object
+          properties:
+            start: { type: string, format: date-time }
+            end: { type: string, format: date-time }
+        cohort_by:
+          type: array
+          items: { type: string }
+        metrics:
+          type: array
+          items: { type: string }
+    CohortAnalysisResponse:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              metrics:
+                type: object
+                additionalProperties: true
+    CostBenefitRequest:
+      type: object
+      properties:
+        filters:
+          type: object
+        time_range:
+          type: object
+        metrics:
+          type: array
+          items: { type: string }
+        group_by: { type: string }
+    CostBenefitResponse:
+      type: object
+      properties:
+        summary:
+          type: object
+          additionalProperties: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              group: { type: string }
+              metrics:
+                type: object
+                additionalProperties: true
+        metrics:
+          type: array
+          items: { type: string }
+    AnalyticsReportRequest:
+      type: object
+      properties:
+        filters:
+          type: object
+          additionalProperties: true
+        cohort:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        cost_benefit:
+          type: object
+          additionalProperties: true
+        insights:
+          type: array
+          items: { type: string }
+    VerifiableLogEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        entity_type:
+          type: string
+        entity_id:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+        previous_hash:
+          type: string
+          nullable: true
+        current_hash:
+          type: string
+        event_data:
+          type: object
+          additionalProperties: true
+    VerifyChainResponse:
+      type: object
+      properties:
+        integrity:
+          type: string
+          enum: [OK, FAILED]
+        broken_at_id:
+          type: integer
+          nullable: true
+        checked:
+          type: integer
+        last_hash:
+          type: string
+          nullable: true
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerifiableLogEntry'
+security:
+  - cookieAuth: []

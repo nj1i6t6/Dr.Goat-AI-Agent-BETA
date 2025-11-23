@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="660" viewBox="0 0 1240 660">
+  <style>
+    text { font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; fill: #1b1b1b; }
+    .title { font-size: 28px; font-weight: bold; }
+    .section { fill: #f1f8e9; stroke: #9ccc65; stroke-dasharray: 10 6; stroke-width: 2; rx: 18; ry: 18; }
+    .module { fill: #ffffff; stroke-width: 2.4; rx: 16; ry: 16; }
+    .frontend { stroke: #43a047; }
+    .backend { stroke: #1e88e5; }
+    .external { stroke: #8e24aa; }
+    .model { stroke: #fb8c00; }
+    .label { font-size: 20px; font-weight: 600; }
+    .note { font-size: 16px; fill: #546e7a; }
+    .arrow { stroke: #37474f; stroke-width: 2.3; fill: none; marker-end: url(#arrowhead); }
+    .dashed { stroke-dasharray: 8 6; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#37474f" />
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#f9fbf4" />
+  <text x="620" y="50" text-anchor="middle" class="title">子系統互動圖 - AI 與生長預測</text>
+
+  <rect class="section" x="60" y="110" width="360" height="480" />
+  <text x="240" y="140" text-anchor="middle" class="note">前端互動</text>
+
+  <rect class="section" x="450" y="110" width="360" height="480" />
+  <text x="630" y="140" text-anchor="middle" class="note">後端推論</text>
+
+  <rect class="section" x="840" y="110" width="320" height="480" />
+  <text x="1000" y="140" text-anchor="middle" class="note">模型與外部資源</text>
+
+  <rect class="module frontend" x="90" y="200" width="300" height="120" />
+  <text text-anchor="middle">
+    <tspan x="240" y="245" class="label">PredictionView</tspan>
+    <tspan x="240" y="273" class="note">views/PredictionView.vue</tspan>
+    <tspan x="240" y="301" class="note">生長預測輸入</tspan>
+  </text>
+
+  <rect class="module frontend" x="90" y="360" width="300" height="120" />
+  <text text-anchor="middle">
+    <tspan x="240" y="405" class="label">ChatView</tspan>
+    <tspan x="240" y="433" class="note">views/ChatView.vue</tspan>
+    <tspan x="240" y="461" class="note">AI 輔助問答</tspan>
+  </text>
+
+  <rect class="module frontend" x="90" y="520" width="300" height="120" />
+  <text text-anchor="middle">
+    <tspan x="240" y="565" class="label">AI Stores</tspan>
+    <tspan x="240" y="593" class="note">stores/prediction.js · stores/chat.js</tspan>
+    <tspan x="240" y="621" class="note">管理請求狀態 / 緩存</tspan>
+  </text>
+
+  <rect class="module backend" x="480" y="200" width="300" height="130" />
+  <text text-anchor="middle">
+    <tspan x="630" y="245" class="label">Prediction API</tspan>
+    <tspan x="630" y="273" class="note">app/api/prediction.py</tspan>
+    <tspan x="630" y="301" class="note">推理 / 誤差回傳</tspan>
+  </text>
+
+  <rect class="module backend" x="480" y="360" width="300" height="130" />
+  <text text-anchor="middle">
+    <tspan x="630" y="405" class="label">Agent API</tspan>
+    <tspan x="630" y="433" class="note">app/api/agent.py</tspan>
+    <tspan x="630" y="461" class="note">RAG 聊天推理</tspan>
+  </text>
+
+  <rect class="module backend" x="480" y="520" width="300" height="110" />
+  <text text-anchor="middle">
+    <tspan x="630" y="565" class="label">RAG Loader</tspan>
+    <tspan x="630" y="593" class="note">app/rag_loader.py</tspan>
+  </text>
+
+  <rect class="module model" x="870" y="200" width="280" height="120" />
+  <text text-anchor="middle">
+    <tspan x="1010" y="245" class="label">Sheep Growth LGBM</tspan>
+    <tspan x="1010" y="273" class="note">models/sheep_growth_lgbm_q10.joblib</tspan>
+  </text>
+
+  <rect class="module model" x="870" y="350" width="280" height="120" />
+  <text text-anchor="middle">
+    <tspan x="1010" y="395" class="label">特徵重要度</tspan>
+    <tspan x="1010" y="423" class="note">models/sheep_feature_importances.csv</tspan>
+  </text>
+
+  <rect class="module external" x="870" y="500" width="280" height="120" />
+  <text text-anchor="middle">
+    <tspan x="1010" y="545" class="label">Gemini API</tspan>
+    <tspan x="1010" y="573" class="note">Google Generative AI</tspan>
+  </text>
+
+  <path class="arrow" d="M390 260 L 480 260" />
+  <text x="420" y="240" class="note">預測請求</text>
+
+  <path class="arrow" d="M390 420 L 480 420" />
+  <text x="420" y="400" class="note">聊天查詢</text>
+
+  <path class="arrow" d="M240 520 L 240 470" />
+  <text x="180" y="500" class="note">結果緩存</text>
+
+  <path class="arrow" d="M780 260 L 870 260" />
+  <text x="810" y="240" class="note">模型推論</text>
+
+  <path class="arrow dashed" d="M780 420 L 870 420" />
+  <text x="810" y="400" class="note">可解釋性資料</text>
+
+  <path class="arrow" d="M780 560 L 870 560" />
+  <text x="810" y="540" class="note">語言推理</text>
+
+  <path class="arrow dashed" d="M1010 320 L 1010 350" />
+  <text x="1020" y="335" class="note">週期更新</text>
+
+  <path class="arrow dashed" d="M1010 470 L 1010 500" />
+  <text x="1020" y="485" class="note">RAG 上下文</text>
+
+  <path class="arrow" d="M630 330 L 630 360" />
+  <text x="640" y="340" class="note">重試 / 限流</text>
+  </svg>

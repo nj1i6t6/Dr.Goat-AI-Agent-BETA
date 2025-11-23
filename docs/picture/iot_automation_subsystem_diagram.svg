@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="660" viewBox="0 0 1280 660">
+  <style>
+    text { font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; fill: #1b1b1b; }
+    .title { font-size: 28px; font-weight: bold; }
+    .section { fill: #fff8e1; stroke: #ffb300; stroke-dasharray: 10 6; stroke-width: 2; rx: 18; ry: 18; }
+    .module { fill: #ffffff; stroke-width: 2.4; rx: 16; ry: 16; }
+    .frontend { stroke: #fb8c00; }
+    .backend { stroke: #1e88e5; }
+    .worker { stroke: #d84315; }
+    .device { stroke: #6d4c41; fill: #fbe9e7; }
+    .label { font-size: 20px; font-weight: 600; }
+    .note { font-size: 16px; fill: #546e7a; }
+    .arrow { stroke: #5d4037; stroke-width: 2.3; fill: none; marker-end: url(#arrowhead); }
+    .dashed { stroke-dasharray: 8 6; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5d4037" />
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#fffdf6" />
+  <text x="640" y="50" text-anchor="middle" class="title">子系統互動圖 - IoT 自動化</text>
+
+  <rect class="section" x="60" y="110" width="320" height="480" />
+  <text x="220" y="140" text-anchor="middle" class="note">前端控制台</text>
+
+  <rect class="section" x="410" y="110" width="320" height="480" />
+  <text x="570" y="140" text-anchor="middle" class="note">後端任務協調</text>
+
+  <rect class="section" x="760" y="110" width="240" height="480" />
+  <text x="880" y="140" text-anchor="middle" class="note">工作佇列 / 工作者</text>
+
+  <rect class="section" x="1030" y="110" width="200" height="480" />
+  <text x="1130" y="140" text-anchor="middle" class="note">現場裝置</text>
+
+  <rect class="module frontend" x="90" y="200" width="280" height="120" />
+  <text text-anchor="middle">
+    <tspan x="230" y="245" class="label">IotManagementView</tspan>
+    <tspan x="230" y="273" class="note">views/IotManagementView.vue</tspan>
+    <tspan x="230" y="301" class="note">裝置監控 / 任務派送</tspan>
+  </text>
+
+  <rect class="module frontend" x="90" y="360" width="280" height="120" />
+  <text text-anchor="middle">
+    <tspan x="230" y="405" class="label">AutomationRuleBuilder</tspan>
+    <tspan x="230" y="433" class="note">components/iot/AutomationRuleBuilder.vue</tspan>
+    <tspan x="230" y="461" class="note">制定閾值 / 自動化</tspan>
+  </text>
+
+  <rect class="module frontend" x="90" y="520" width="280" height="110" />
+  <text text-anchor="middle">
+    <tspan x="230" y="560" class="label">IoT Store</tspan>
+    <tspan x="230" y="588" class="note">stores/iot.js</tspan>
+  </text>
+
+  <rect class="module backend" x="440" y="200" width="280" height="120" />
+  <text text-anchor="middle">
+    <tspan x="580" y="245" class="label">IoT API</tspan>
+    <tspan x="580" y="273" class="note">app/api/iot.py</tspan>
+    <tspan x="580" y="301" class="note">裝置註冊 / 任務建立</tspan>
+  </text>
+
+  <rect class="module backend" x="440" y="360" width="280" height="120" />
+  <text text-anchor="middle">
+    <tspan x="580" y="405" class="label">Task Orchestrator</tspan>
+    <tspan x="580" y="433" class="note">app/tasks.py</tspan>
+    <tspan x="580" y="461" class="note">enqueue_iot_command</tspan>
+  </text>
+
+  <rect class="module backend" x="440" y="520" width="280" height="110" />
+  <text text-anchor="middle">
+    <tspan x="580" y="560" class="label">Simple Queue</tspan>
+    <tspan x="580" y="588" class="note">app/simple_queue.py</tspan>
+  </text>
+
+  <rect class="module worker" x="780" y="220" width="200" height="120" />
+  <text text-anchor="middle">
+    <tspan x="880" y="265" class="label">IoT Automation</tspan>
+    <tspan x="880" y="293" class="note">app/iot/automation.py</tspan>
+    <tspan x="880" y="321" class="note">自動化執行器</tspan>
+  </text>
+
+  <rect class="module worker" x="780" y="380" width="200" height="120" />
+  <text text-anchor="middle">
+    <tspan x="880" y="425" class="label">RQ Worker</tspan>
+    <tspan x="880" y="453" class="note">backend/run_worker.py</tspan>
+    <tspan x="880" y="481" class="note">Redis 任務消費</tspan>
+  </text>
+
+  <rect class="module device" x="1050" y="220" width="160" height="110" />
+  <text text-anchor="middle">
+    <tspan x="1130" y="260" class="label">感測節點</tspan>
+    <tspan x="1130" y="288" class="note">溫度 / 濕度</tspan>
+  </text>
+
+  <rect class="module device" x="1050" y="360" width="160" height="110" />
+  <text text-anchor="middle">
+    <tspan x="1130" y="400" class="label">執行器</tspan>
+    <tspan x="1130" y="428" class="note">餵食 / 通風控制</tspan>
+  </text>
+
+  <rect class="module device" x="1050" y="500" width="160" height="110" />
+  <text text-anchor="middle">
+    <tspan x="1130" y="540" class="label">邊緣閘道</tspan>
+    <tspan x="1130" y="568" class="note">MQTT / HTTPS</tspan>
+  </text>
+
+  <path class="arrow" d="M230 320 L 230 360" />
+  <text x="250" y="340" class="note">建立規則</text>
+
+  <path class="arrow" d="M230 480 L 230 520" />
+  <text x="190" y="500" class="note">狀態同步</text>
+
+  <path class="arrow" d="M370 260 L 440 260" />
+  <text x="400" y="240" class="note">API 呼叫</text>
+
+  <path class="arrow dashed" d="M370 420 L 440 420" />
+  <text x="400" y="400" class="note">規則上傳</text>
+
+  <path class="arrow" d="M720 420 L 780 420" />
+  <text x="750" y="400" class="note">Redis 任務</text>
+
+  <path class="arrow" d="M580 520 L 580 480" />
+  <text x="600" y="500" class="note">入列</text>
+
+  <path class="arrow" d="M980 420 L 1050 420" />
+  <text x="1000" y="400" class="note">指令下達</text>
+
+  <path class="arrow dashed" d="M1050 260 L 720 260" />
+  <text x="900" y="240" class="note">感測資料回報</text>
+
+  <path class="arrow dashed" d="M1050 540 L 440 540" />
+  <text x="760" y="520" class="note">心跳 / 裝置狀態</text>
+
+  <path class="arrow" d="M880 340 L 880 380" />
+  <text x="890" y="360" class="note">重試策略</text>
+  </svg>

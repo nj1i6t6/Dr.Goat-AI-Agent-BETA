@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="640" viewBox="0 0 1260 640">
+  <style>
+    text { font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; fill: #1b1b1b; }
+    .title { font-size: 28px; font-weight: bold; }
+    .section { fill: #e8f5fd; stroke: #29b6f6; stroke-dasharray: 10 6; stroke-width: 2; rx: 18; ry: 18; }
+    .module { fill: #ffffff; stroke-width: 2.3; rx: 16; ry: 16; }
+    .frontend { stroke: #0288d1; }
+    .backend { stroke: #1565c0; }
+    .data { stroke: #00acc1; }
+    .external { stroke: #00897b; }
+    .label { font-size: 20px; font-weight: 600; }
+    .note { font-size: 16px; fill: #546e7a; }
+    .arrow { stroke: #455a64; stroke-width: 2.2; fill: none; marker-end: url(#arrowhead); }
+    .dashed { stroke-dasharray: 8 6; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#455a64" />
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#f4fbff" />
+  <text x="630" y="50" text-anchor="middle" class="title">子系統互動圖 - 產銷履歷</text>
+
+  <rect class="section" x="60" y="110" width="320" height="480" />
+  <text x="220" y="140" text-anchor="middle" class="note">前端應用</text>
+
+  <rect class="section" x="410" y="110" width="320" height="480" />
+  <text x="570" y="140" text-anchor="middle" class="note">後端服務</text>
+
+  <rect class="section" x="760" y="110" width="250" height="480" />
+  <text x="885" y="140" text-anchor="middle" class="note">資料與稽核</text>
+
+  <rect class="section" x="1040" y="110" width="180" height="480" />
+  <text x="1130" y="140" text-anchor="middle" class="note">外部利害關係人</text>
+
+  <rect class="module frontend" x="90" y="200" width="280" height="120" />
+  <text text-anchor="middle">
+    <tspan x="230" y="245" class="label">TraceabilityManagementView</tspan>
+    <tspan x="230" y="273" class="note">views/TraceabilityManagementView.vue</tspan>
+    <tspan x="230" y="301" class="note">批量維護批次資料</tspan>
+  </text>
+
+  <rect class="module frontend" x="90" y="360" width="280" height="120" />
+  <text text-anchor="middle">
+    <tspan x="230" y="405" class="label">TraceabilityPublicView</tspan>
+    <tspan x="230" y="433" class="note">views/TraceabilityPublicView.vue</tspan>
+    <tspan x="230" y="461" class="note">外部查詢公開資訊</tspan>
+  </text>
+
+  <rect class="module frontend" x="90" y="520" width="280" height="110" />
+  <text text-anchor="middle">
+    <tspan x="230" y="560" class="label">Traceability Store</tspan>
+    <tspan x="230" y="588" class="note">stores/traceability.js</tspan>
+  </text>
+
+  <rect class="module backend" x="440" y="200" width="280" height="130" />
+  <text text-anchor="middle">
+    <tspan x="580" y="245" class="label">Traceability API</tspan>
+    <tspan x="580" y="273" class="note">app/api/traceability.py</tspan>
+    <tspan x="580" y="301" class="note">批次 / QR 代碼</tspan>
+  </text>
+
+  <rect class="module backend" x="440" y="360" width="280" height="130" />
+  <text text-anchor="middle">
+    <tspan x="580" y="405" class="label">Data Exporter</tspan>
+    <tspan x="580" y="433" class="note">app/api/data_management.py</tspan>
+    <tspan x="580" y="461" class="note">CSV/Excel 轉換</tspan>
+  </text>
+
+  <rect class="module backend" x="440" y="520" width="280" height="110" />
+  <text text-anchor="middle">
+    <tspan x="580" y="560" class="label">Audit Service</tspan>
+    <tspan x="580" y="588" class="note">app/utils.py · logging</tspan>
+  </text>
+
+  <rect class="module data" x="790" y="200" width="220" height="120" />
+  <text text-anchor="middle">
+    <tspan x="900" y="245" class="label">Batch Ledger</tspan>
+    <tspan x="900" y="273" class="note">PostgreSQL: traceability_batch</tspan>
+  </text>
+
+  <rect class="module data" x="790" y="360" width="220" height="120" />
+  <text text-anchor="middle">
+    <tspan x="900" y="405" class="label">Document Archive</tspan>
+    <tspan x="900" y="433" class="note">docs/assets/traceability</tspan>
+  </text>
+
+  <rect class="module data" x="790" y="520" width="220" height="110" />
+  <text text-anchor="middle">
+    <tspan x="900" y="560" class="label">Change Log</tspan>
+    <tspan x="900" y="588" class="note">Alembic revisions</tspan>
+  </text>
+
+  <rect class="module external" x="1060" y="220" width="140" height="110" />
+  <text text-anchor="middle">
+    <tspan x="1130" y="260" class="label">檢驗單位</tspan>
+    <tspan x="1130" y="288" class="note">CSV 審核</tspan>
+  </text>
+
+  <rect class="module external" x="1060" y="360" width="140" height="110" />
+  <text text-anchor="middle">
+    <tspan x="1130" y="400" class="label">消費者</tspan>
+    <tspan x="1130" y="428" class="note">QR Code 查詢</tspan>
+  </text>
+
+  <rect class="module external" x="1060" y="500" width="140" height="110" />
+  <text text-anchor="middle">
+    <tspan x="1130" y="540" class="label">合作通路</tspan>
+    <tspan x="1130" y="568" class="note">資料 API</tspan>
+  </text>
+
+  <path class="arrow" d="M230 320 L 230 360" />
+  <text x="240" y="340" class="note">公開資料</text>
+
+  <path class="arrow" d="M370 260 L 440 260" />
+  <text x="400" y="240" class="note">批次維護</text>
+
+  <path class="arrow dashed" d="M370 420 L 440 420" />
+  <text x="400" y="400" class="note">匯出 / 列印</text>
+
+  <path class="arrow" d="M720 260 L 790 260" />
+  <text x="760" y="240" class="note">寫入帳冊</text>
+
+  <path class="arrow dashed" d="M720 420 L 790 420" />
+  <text x="760" y="400" class="note">附件存證</text>
+
+  <path class="arrow" d="M940 260 L 1060 260" />
+  <text x="980" y="240" class="note">審核通知</text>
+
+  <path class="arrow" d="M940 420 L 1060 420" />
+  <text x="980" y="400" class="note">QR 查詢 JSON</text>
+
+  <path class="arrow dashed" d="M940 560 L 1060 560" />
+  <text x="980" y="540" class="note">API Token</text>
+
+  <path class="arrow" d="M580 330 L 580 360" />
+  <text x="590" y="340" class="note">稽核紀錄</text>
+  </svg>
