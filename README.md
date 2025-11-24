@@ -43,6 +43,7 @@
 |------|----------|----------|------------------|-----------|
 | 認證 | 註冊、登入、健康檢查、預設事件字典 | `app/api/auth.py` | `LoginView.vue`、`stores/auth.js` | `tests/test_auth_api.py`、`tests/test_auth_agent_enhanced.py` |
 | 羊群管理 | CRUD、歷史自動紀錄、提醒欄位、自訂事件詞庫 | `app/api/sheep.py`、`app/models.py` | `SheepListView.vue`、`stores/sheep.js` | `tests/test_sheep_api.py`、`tests/test_sheep_events_api.py`、`tests/test_sheep_enhanced.py` |
+| 農場層級與權限 | Farm → Area → Shed → Pen 層級、加入代碼審核、角色控管（Owner/Manager/Worker/Vet） | `app/api/farm.py`、`app/authz.py`、`app/models.py` | 管理後台；與現有 auth store 整合 | `tests/test_farm_api.py` |
 | 儀表板與報表 | 提醒、停藥檢查、健康警示、牧場摘要、Redis 快取 | `app/api/dashboard.py`、`app/cache.py` | `DashboardView.vue` | `tests/test_dashboard_api.py`、`tests/test_dashboard_enhanced.py` |
 | 資料治理 | Excel 匯出/匯入、AI 導入建議、聊天紀錄匯出 | `app/api/data_management.py`、`app/utils.py` | `DataManagementView.vue`、`stores/data` | `tests/test_data_management_api.py`、`tests/test_data_management_enhanced.py`、`tests/test_data_management_error_handling.py` |
 | AI 協作 | 每日提示、營養/ESG 建議、多模態聊天 | `app/api/agent.py`、`app/utils.py`、`app/models.ChatHistory` | `ConsultationView.vue`、`ChatView.vue`、`stores/consultation.js`、`stores/chat.js` | `tests/test_agent_api.py` |
@@ -80,7 +81,7 @@ graph TB
   end
 
   subgraph DataTier["資料儲存層"]
-    Postgres[(PostgreSQL 14+ / Prod)]
+    Postgres[(PostgreSQL 16+ / Prod)]
     SQLite[(SQLite / Dev & Test)]
     Filesystem[(模型/媒體)]
     Redis[(Session / Cache / Queue)]
@@ -319,6 +320,12 @@ npm run lint
 ## 15. Roadmap 與版本記錄
 
 請參閱 [`docs/project_roadmap.md`](docs/project_roadmap.md) 與 `docs/adr/` 以了解架構決策、未來規劃與升級歷程。提交 PR 時請盡量引用相關 ADR 以維持可追蹤性。
+
+近期重點：
+
+- 基礎環境升級：Docker Compose 改用 PostgreSQL 16，`google-genai` 升級至 1.45.0 以支援 Gemini 3.0，後端仍鎖定 Python 3.11 映像。
+- 新增可插拔的 RAG 服務層 (`app/rag_service.py`)，以 Adapter 方式包裹既有 FAISS，未來可直接換接雲端向量/檔案索引。
+- 建立農場層級與 RBAC：新增 `Farm/Area/Shed/Pen` 模型、加入代碼審核/核准流程與 `role_required` 權限檢查，對應 `/api/farm` 系列端點。
 
 ---
 

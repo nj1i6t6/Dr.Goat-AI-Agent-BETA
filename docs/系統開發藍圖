@@ -1,5 +1,10 @@
 # 領頭羊博士 (Dr. Goat) 系統升級與重構藍圖 v2.0
 
+## v2.0 實作紀錄（本次更新）
+- 系統環境升級：Docker Compose 改用 PostgreSQL 16，後端 `google-genai` 升級至 1.45.0，主環境維持 Python 3.11 映像。
+- RAG 介面重構：新增 `app/rag_service.py` 作為 Adapter/Service 抽象層，沿用本地 FAISS，同時預留未來替換雲端索引的接口。
+- 後端 RBAC 架構：建立 `Farm → Area → Shed → Pen` 模型與 `/api/farm` 加入/審核端點，`role_required` 裝飾器支援 Owner/Manager/Worker/Vet 權限控管。
+
 ## 1. 系統環境與框架升級 (System Upgrade)
 **目標**：確保系統處於最新且穩定的技術基礎，提升效能與安全性。
 - **核心版本更新**：

@@ -43,6 +43,7 @@
 |--------|------------------------|-----------------|-------------------------|---------------|
 | Authentication | Registration, login, health checks, seeded event options | `app/api/auth.py` | `LoginView.vue`, `stores/auth.js` | `tests/test_auth_api.py`, `tests/test_auth_agent_enhanced.py` |
 | Sheep Management | CRUD, auto history logging, reminders, custom event vocabularies | `app/api/sheep.py`, `app/models.py` | `SheepListView.vue`, `stores/sheep.js` | `tests/test_sheep_api.py`, `tests/test_sheep_events_api.py`, `tests/test_sheep_enhanced.py` |
+| Farm Hierarchy & RBAC | Farm → Area → Shed → Pen tiers, join/approval flows, role guard (`Owner/Manager/Worker/Vet`) | `app/api/farm.py`, `app/authz.py`, `app/models.py` | Admin console; integrates with existing auth store | `tests/test_farm_api.py` |
 | Dashboard & Reports | Cached reminders, medication withdrawal checks, health alerts, farm summary | `app/api/dashboard.py`, `app/cache.py` | `DashboardView.vue`, `stores/dashboard` (computed from API) | `tests/test_dashboard_api.py`, `tests/test_dashboard_enhanced.py` |
 | Data Management | Excel export/import, AI-assisted mapping, chat history export | `app/api/data_management.py`, `app/utils.py` | `DataManagementView.vue`, `stores/data` | `tests/test_data_management_api.py`, `tests/test_data_management_enhanced.py`, `tests/test_data_management_error_handling.py` |
 | AI Assistant | Daily tips, nutrition/ESG recommendations, multimodal chat with history | `app/api/agent.py`, `app/utils.py`, `app/models.ChatHistory` | `ConsultationView.vue`, `ChatView.vue`, `stores/consultation.js`, `stores/chat.js` | `tests/test_agent_api.py` |
@@ -80,7 +81,7 @@ graph TB
   end
 
   subgraph DataTier["Persistence Layer"]
-    Postgres[(PostgreSQL 14+ / Prod)]
+    Postgres[(PostgreSQL 16+ / Prod)]
     SQLite[(SQLite / Dev & Tests)]
     Filesystem[(Model Artifacts & Media)]
     Redis[(Sessions, Cache, Queues)]
@@ -322,6 +323,12 @@ Tests live alongside views/stores (`*.test.js`, `*.behavior.test.js`) and exerci
 ## 15. Release Notes & Roadmap
 
 See [`docs/project_roadmap.md`](./project_roadmap.md) and ADRs under `docs/adr/` for architectural decisions, planned integrations, and upgrade history. Contributions should cross-reference relevant ADR IDs for traceability.
+
+Latest highlights:
+
+- Upgraded runtime targets: Docker Compose now provisions PostgreSQL 16, and the backend depends on `google-genai` 1.45.0 to align with Gemini 3.0 APIs. `python:3.11` remains the baseline image.
+- Introduced a pluggable RAG service layer (`app/rag_service.py`) wrapping the existing FAISS store so adapters can swap in cloud providers without touching API logic.
+- Added farm hierarchy & RBAC primitives (`Farm`/`Area`/`Shed`/`Pen`) plus join/approval endpoints under `/api/farm`, secured via `role_required` decorators for Owner/Manager/Worker/Vet roles.
 
 ---
 
