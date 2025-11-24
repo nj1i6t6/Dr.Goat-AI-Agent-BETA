@@ -8,7 +8,11 @@ from app.schemas import (
     AnalyticsReportRequestModel,
     create_error_response,
 )
-from app.rag_loader import get_status as get_rag_status, rag_query
+from app.rag_service import rag_service
+
+# 與舊版測試相容：提供 rag_query 別名供 monkeypatch 使用
+rag_query = rag_service.query
+get_rag_status = rag_service.status
 from pydantic import ValidationError
 from datetime import datetime
 from html import escape as html_escape
@@ -372,6 +376,17 @@ def get_recommendation():
 
     # 將 Pydantic 模型轉換為字典
     data = recommendation_data.model_dump(exclude_unset=True)
+
+    if data.get('Body_Weight_kg') is None:
+        return (
+            jsonify(
+                create_error_response(
+                    "請求資料驗證失敗",
+                    [{'loc': ['Body_Weight_kg'], 'msg': '必須提供體重(kg)'}],
+                )
+            ),
+            400,
+        )
     
     ear_num = data.get('EarNum')
     sheep_context_str = ""
@@ -441,7 +456,7 @@ def get_recommendation():
 
     result = call_gemini_api(full_prompt, api_key)
     if "error" in result:
-        return jsonify(error=result["error"]), 500
+        return jsonify(error=result["error"]), 400
     
     recommendation_html = markdown.markdown(result.get("text",""), extensions=['fenced_code', 'tables', 'nl2br'])
     return jsonify(recommendation_html=recommendation_html)

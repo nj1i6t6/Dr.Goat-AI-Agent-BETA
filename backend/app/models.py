@@ -7,6 +7,62 @@ import hashlib
 import hmac
 from sqlalchemy.ext.declarative import declared_attr
 
+
+class Farm(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    code = db.Column(db.String(12), unique=True, nullable=False, index=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    areas = db.relationship('Area', backref='farm', lazy='dynamic', cascade="all, delete-orphan")
+    memberships = db.relationship('UserFarmRole', back_populates='farm', cascade="all, delete-orphan")
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'code': self.code,
+            'owner_id': self.owner_id,
+        }
+
+
+class Area(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    farm_id = db.Column(db.Integer, db.ForeignKey('farm.id', ondelete='CASCADE'), nullable=False)
+
+    sheds = db.relationship('Shed', backref='area', lazy='dynamic', cascade="all, delete-orphan")
+
+
+class Shed(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    area_id = db.Column(db.Integer, db.ForeignKey('area.id', ondelete='CASCADE'), nullable=False)
+
+    pens = db.relationship('Pen', backref='shed', lazy='dynamic', cascade="all, delete-orphan")
+
+
+class Pen(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    shed_id = db.Column(db.Integer, db.ForeignKey('shed.id', ondelete='CASCADE'), nullable=False)
+
+    sheep = db.relationship('Sheep', backref='pen', lazy='dynamic')
+
+
+class UserFarmRole(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    farm_id = db.Column(db.Integer, db.ForeignKey('farm.id', ondelete='CASCADE'), nullable=False)
+    role = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.String(20), default='pending', index=True)  # pending / active
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', back_populates='farm_memberships')
+    farm = db.relationship('Farm', back_populates='memberships')
+    __table_args__ = (db.UniqueConstraint('user_id', 'farm_id', name='_user_farm_uc'),)
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -22,6 +78,7 @@ class User(UserMixin, db.Model):
     automation_rules = db.relationship('AutomationRule', backref='owner', lazy='dynamic', cascade="all, delete-orphan")
     cost_entries = db.relationship('CostEntry', backref='owner', lazy='dynamic', cascade="all, delete-orphan")
     revenue_entries = db.relationship('RevenueEntry', backref='owner', lazy='dynamic', cascade="all, delete-orphan")
+    farm_memberships = db.relationship('UserFarmRole', back_populates='user', cascade="all, delete-orphan")
 
 
     def set_password(self, password):
@@ -71,6 +128,7 @@ class EventDescriptionOption(db.Model):
 class Sheep(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    pen_id = db.Column(db.Integer, db.ForeignKey('pen.id', ondelete='SET NULL'))
     
     # --- 核心基础识别资料 (Core Identification) ---
     EarNum = db.Column(db.String(100), nullable=False) # 耳号

@@ -1,7 +1,7 @@
 services:
   # PostgreSQL 資料庫服務
   db:
-    image: postgres:15-alpine
+    image: postgres:16-alpine
     container_name: goat-nutrition-db
     environment:
       POSTGRES_DB: goat_nutrition_db

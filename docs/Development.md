@@ -7,7 +7,7 @@
 | Python | 3.11.x |
 | Node.js | 20.x |
 | npm | 10.x |
-| PostgreSQL（選用） | 14+ |
+| PostgreSQL（選用） | 16+ |
 | Redis | 7.2+ |
 
 > `.env.example` 僅示意部分變數，實際開發請補齊 `SECRET_KEY`、`API_HMAC_SECRET`、`GOOGLE_API_KEY` 等必填欄位。
@@ -45,6 +45,9 @@
 | `app/api/prediction.py` | LightGBM/線性回歸預測、資料品質檢查、ESG 解讀。 |
 | `app/api/traceability.py` | 產品批次、加工步驟、羊隻關聯與公開故事。 |
 | `app/api/iot.py` | 裝置管理、API Key HMAC、感測資料攝取、自動化規則。 |
+| `app/api/farm.py` | 農場/區/舍/欄層級 CRUD、加入審核、角色分派。 |
+| `app/authz.py` | 角色權限檢查 (`Owner`/`Manager`/`Worker`/`Vet`) 的 decorator。 |
+| `app/rag_service.py` | RAG Adapter/Service 抽象層，封裝本地 FAISS 與未來雲端介接。 |
 | `app/api/tasks.py` + `app/tasks.py` | `SimpleQueue` 背景任務示範與佇列包裝。 |
 | `app/iot/automation.py` | 感測/控制佇列、規則判斷、HTTP 控制派送與紀錄。 |
 | `app/utils.py` | Gemini 呼叫、羊隻上下文聚合、圖片編碼。 |
